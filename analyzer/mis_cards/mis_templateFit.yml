@@ -18,15 +18,14 @@ datasets:
     signal: 1
     range: [-50,50]
     histname: ZH_yields
-  WW:
-    signal: 0
-    range: [-10,10]
-    histname: WW_yields
-  WZ:
-    signal: 0
-    range: [-10,10]
-    histname: WZ_yields
-
+  tbarWp:
+    signal: 1
+    range: [-50,50]
+    histname: tbarWp_yields
+  tWm:
+    signal: 1
+    range: [-50,50]
+    histname: tWm_yields
 #  OtG:
 #    # Fitted
 #    signal: 1
@@ -66,4 +65,4 @@ analysis:
   
   # If "get" mode: specify file containing all the histograms.
   # If every process has a different file, put a "histfile" for each process INSTEAD of here
-  histfile: results/tests/MIS_hists.root
+  histfile: results/discriBased/discriBased_hists.root

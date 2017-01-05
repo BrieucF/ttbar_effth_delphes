@@ -1,0 +1,153 @@
+# List of input datasets
+datasets:
+    TT:
+        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/TTTo2L2Nu_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+        # Signal codes:
+        # -1 ... Can be used as a signal or background to train a MVA
+        # -2 ... Can be used as a background to train a MVA
+        # -3 ... Will not be used for MVA training, but will be evaluated and passed along  
+        # -4 ... Cannot be evaluated (This code will mainly be used to decide whether the branching process has to be stopped. tmva will NOT check by itself whether this code is present.)
+        # -5 ... For data, will not participate in the tree decision nor to the branch composition plot but will be evaluated 
+        # 0 ... Will be trained on, considered to be a background (given here for completeness: this code is used by tmva, and using it here might cause the tree-building strategy function to produce unexpected results).
+        # 1 ... Will be trained on, considered to be THE signal (given here for completeness: this code is used by tmva, and using it here might cause the tree-building strategy function to produce unexpected results).
+        signal: -1
+        # Any Root color, with composition (eg. kRed+1):
+        color: 5009
+        xsection: 87.31 # in pb
+        genevents: 4995600
+        # Name of the TTree containing the events
+        treename: t
+        # Weight under the corresponding hypothesis. If left blank, "otherinputvar" is used as training variables.
+        weightname: [pp_tt_llbb_tfJetAllEta_minLog_weight]
+        # Formula used to get the event weights from branches in the TTree (ex: GenWeight*BTagScale)
+        evtweight: jjbtag*pu*event_weight*trigeff*llidiso*0.954
+#    DY:
+#        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+#        signal: -1
+#        color: 5014
+#        xsection: 6025.2
+#        genevents: 4923952988160
+#        treename: t
+#        weightname: [pp_Z_llbb_simple_tfJetAllEta_minLog_weight]
+#        evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+    DY:
+        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+        signal: -1
+        color: 5014
+        xsection: 6025.2
+        genevents: 4923952988160
+        treename: t
+        weightname: [pp_Z_llbb_simple_tfJetAllEta_minLog_weight]
+        evtweight: jjbtag*pu*event_weight*trigeff*llidiso*0.782
+    tbarWp:
+        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+        signal: -1
+        color: 5012
+        xsection: 35.6
+        genevents: 999400
+        treename: t
+        weightname: [twplus_tfJetAllEta_minLog_weight]
+        evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+    tWm:
+        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/ST_tW_top_5f_inclusiveDecays_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+        signal: -1
+        color: 5008
+        xsection: 35.6
+        genevents: 1000000
+        treename: t
+        weightname: [twminus_tfJetAllEta_minLog_weight]
+        evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+    ZZ:
+        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+        signal: -1
+        color: 5011
+        xsection: 3.22
+        genevents: 77479632
+        treename: t
+        weightname: [pp_zz_llbb_simple_tfJetAllEta_minLog_weight]
+        evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+    ZH:
+        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+        signal: -1
+        color: 5010
+        #reel value 0.0249
+        xsection: 0.172948      
+        genevents: 147445 #147444.78125
+        treename: t
+        weightname: [pp_zh_llbb_simple_tfJetAllEta_minLog_weight]
+        evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+#    data_obs:
+#        path: ["/home/fynu/bfrancois/storage/RDS/5320_CSV_Skimmed_V5/llbbX/Data2012_Summer12_final_skimed_llbbX_withWeights_V1.root"]
+#        signal: -5
+#        color: kBlack
+#        xsection: 1      
+#        genevents: 1
+#        treename: t
+#        weightname: []
+#        evtweight: "1"  
+
+
+# Analysis: define options relative to the tree building (used by driver.py) and the MVA training (used by tmva)
+analysis:
+    name: minmc_50_effRatio_3_discriBased #tight_btag_s_over_b_smallestyields   #purMinMax_withZh   #DYbbxx_vs_bx_noZh_PurityPM
+    #outputdir: results/smallestYieldsFirst_keepSmallYield_fullPhaseSpace_SF_noZh_DYxx_DYbx_DYbb_Sig01_1Lvl   #results/purMinMax_withZh   #results/DYbbxx_vs_bx_noZh_PurityPM    #zh_LogDiff_with60weight_keepBigYield_withZh
+    outputdir: results/minmc_50_effRatio_3_discriBased #results/tight_btag_s_over_b_smallestyields #results/significance_v0   #results/purMinMax_withZh   #results/DYbbxx_vs_bx_noZh_PurityPM    #zh_LogDiff_with60weight_keepBigYield_withZh
+    # Use these variables for training, in addition to the MEM-weights (if given)
+    otherinputvars: []
+    # Weights common to all the processes, which will be passed to TMVA during training
+    commonweights: jjbtag*pu*event_weight*trigeff*llidiso
+    # Apply a skimming on the input rootfiles before to start the whole chain
+    applySkimming: false
+    #skimmingFormula: (rc_stage_6_idx || rc_stage_16_idx) && MinusLogW_TT>0 && MinusLogW_gg_Zbb>0 && MinusLogW_ZZ_cor0>0 && IncLepslep1pt > 20 && IncLepslep2pt > 20 && jetmetbjet1pt > 30 && jetmetbjet2pt > 30
+    skimmingFormula: 1 
+    # Limit total number of tmva run in parallel:
+    maxTMVA: 15
+    # MLP, BDT or Singleton
+    # "Singleton" means no MVA training, only cutting on a single variable
+    mvamethod: Singleton
+    # Used only if MLP or TMLP.
+    topology: "3,3"
+    # Used by both MLP and BDT. Caution: too many decision trees and too few input variables will cause problems
+    iterations: 500
+    # Number of events used for training (= number of events used for testing!)
+    trainentries: 500
+    # Will split events so as to keep (approximately... to improve precision, raise histbins) this fraction of the signal:
+    workingpoint: 0.5
+    # Do we choose the analysis based on Yield or discrimination :  "DiscriBased" or "YieldsBased" 
+    analysisChoiceMode: "DiscriBased"  #"YieldsBased"  
+    # Consider analysis valid if the purity significance is imporved byt at least puritySigImprovementCriteria units
+    puritySigImprovementCriteria: 3
+    purityImprovementCriteria: 0.3
+    min_eff_s_over_eff_b: 3 
+    minmcevents_afterCut: 10
+    # pb-1
+    lumi: 2300
+    # Bins in the histos used to draw the ROC curve and find cut value
+    histbins: 100
+    # Plotbins better be an exact divider of histbins (to be used in the "fancy plot")
+    plotbins: 50
+    # Low and high edge for all histograms used (will not affect the cut value!)
+    # They are set by default to 0 and 1 if MLP or BDT is used
+    histLoX: 0
+    histHiX: 1
+    # To be used for the template fit (better be an exact divider of histbins)
+    fitbins: 20
+    # Min. number of expected events in a bin of any MVA template
+    minbincontent: 1
+    # Remove analysis results that were found to be non-optimal (true / false)
+    removebadana: false
+    # Remove from list of signals those that have already been trained against (true / false). NOTE: not yet implemented
+    removefrompool: false
+    # Stop considering a process for splitting if it has less than minmcevents events
+    # MUST BE AT LEAST TWICE AS LARGE AS TRAINENTRIES
+    minmcevents: 50
+    # If not enough MC events to train a new NN, still keep the previous results if there
+    # are at least that many events. Otherwise, stop branching. Set to 0 if no check needed.
+    minkeepevents: 0
+    # Stop branching when reached level (1=two subsets; 2=four subsets, ...):
+    maxlevel: 100
+    writeoptions: [plot, hist, ROC]
+    outputtasks: [output, result, split]
+    # Chose how to define the cuts, can be : "SoverB" "SoverSqrtB" or "SoverSqrtSB", if not set, then cut to keep 50% of signal
+    splitmode: "SoverB"
+

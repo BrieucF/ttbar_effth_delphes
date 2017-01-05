@@ -16,9 +16,12 @@ splitMode = "bothCSV_njets" #bothCSV_njets, CSVprod, jetNumb
 
 
 #inFile = "results/%s/MIS_results.out"%(nameOutDir)
-procList = ["DY","TT","ZZ","ZH","WW","WZ", "data_obs"]
-createHistoOrderedYields(inFile,"TT", 0, procList, "data_obs")
-createHistoOrderedYields(inFile,"DY", 0, procList, "data_obs")
+procList = ["DY","TT","ZZ","ZH","tbarWp", 'tWm']
+#createHistoOrderedYields(inFile,"TT", 0, procList, "data_obs")
+#createHistoOrderedYields(inFile,"DY", 0, procList, "data_obs")
+createHistoOrderedYields(inFile,"TT", 0, procList, "")
+createHistoOrderedYields(inFile,"DY", 0, procList, "")
+createHisto(inFile)
 
 (Dict, nbox) = getDictProc_rootFileList_nbox(myConfig, inFile)
 

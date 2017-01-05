@@ -602,7 +602,7 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
       expBkg_err += tempExpBkg_err*tempExpBkg_err;
     }
     expBkg_err = sqrt(expBkg_err);
-    if (expBkg == 0) 
+    if (expBkg <= 0 || expSig <= 0)
       continue;
 
     tempSB_down = expSig/expBkg - (expSig/expBkg)*sqrt(pow(expSig_err/expSig, 2) + pow(expBkg_err/expBkg, 2));

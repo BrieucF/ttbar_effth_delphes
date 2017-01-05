@@ -1,0 +1,67 @@
+# List of input datasets
+datasets:
+    TT:
+        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2/condor/output/TTTo2L2Nu_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+        color: 5009
+        xsection: 87.31 # in pb
+        genevents: 4995600
+        treename: t
+        # Formula used to get the event weights from branches in the TTree (ex: GenWeight*BTagScale)
+        evtweight: jjbtag*pu*event_weight*trigeff*llidiso*0.954
+#    DY:
+#        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2/condor/output/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+#        signal: -1
+#        color: 5014
+#        xsection: 6025.2
+#        genevents: 4923952988160
+#        treename: t
+#        evtweight: jjbtag*pu*event_weight*trigeff*llidiso*0.782
+#    tbarWp:
+#        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2/condor/output/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+#        signal: -1
+#        color: 5012
+#        xsection: 35.6
+#        genevents: 999400
+#        treename: t
+#        evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+#    tWm:
+#        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2/condor/output/ST_tW_top_5f_inclusiveDecays_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+#        signal: -1
+#        color: 5008
+#        xsection: 35.6
+#        genevents: 1000000
+#        treename: t
+#        evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+#    ZZ:
+#        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2/condor/output/ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+#        signal: -1
+#        color: 5011
+#        xsection: 3.22
+#        genevents: 77479632
+#        treename: t
+#        evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+#    ZH:
+#        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2/condor/output/ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+#        signal: -1
+#        color: 5010
+#        xsection: 0.172948      
+#        genevents: 147445
+#        treename: t
+#        evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+#    data_obs:
+#        path: ["/home/fynu/bfrancois/storage/RDS/5320_CSV_Skimmed_V5/llbbX/Data2012_Summer12_final_skimed_llbbX_withWeights_V1.root"]
+#        signal: -5
+#        color: kBlack
+#        xsection: 1      
+#        genevents: 1
+#        treename: t
+#        weightname: []
+#        evtweight: "1"  
+
+# Analysis: define options relative to the tree building (used by driver.py) and the MVA training (used by tmva)
+analysis:
+    trained_tree: 'results/discriBased/discriBased_tree.p'
+    name: discriBased_replay_bagM
+    outputdir: results/discriBased/replay_btagM
+    # pb-1
+    lumi: 2300

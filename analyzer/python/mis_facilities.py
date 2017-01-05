@@ -448,8 +448,9 @@ def createHistoStat(inFile, listProc, splitMode, nameout):
 
 def createHisto(inFile):
   # create histogram with yields in each box
-  listProc=["DYbx","DYbb_xx","TT","ZZ","ZH","WW","WZ","Data"]
-  outRootFile="histo.root"
+  listProc = ["DY","TT","ZZ","ZH","tbarWp", 'tWm']
+  #listProc=["DYbx","DYbb_xx","TT","ZZ","ZH","WW","WZ","Data"]
+  outRootFile="yields_histo.root"
   
   file=open(inFile,'r')
   fileOut = TFile.Open(outRootFile,"recreate")
@@ -488,7 +489,7 @@ def createHisto(inFile):
 def createHistoOrderedYields(inFile, processOrdered, doKolmoTest, listProc, dataName = ""):
   # create histogram with yields in each box, ordered according to a given process decreasing yield
   outDir = inFile.replace(inFile.split("/")[-1],"")+"/"
-  outRootFile = outDir + "histoOrder_"+processOrdered+".root"
+  outRootFile = outDir + "yields_histo_ordered_"+processOrdered+".root"
   print outRootFile
   
   file=open(inFile,'r')

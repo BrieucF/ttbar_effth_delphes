@@ -23,28 +23,72 @@ def puritySignifSubLeadProc(nLead, nSubLead) :
     return (nSubLead*sqrt(nSubLead+nLead))/sqrt(nSubLead*nLead)
 
 def getPurity(n1, n2) :
+    if n1==0 and n2==0:
+        return 0
     return n1/float(n1+n2)
+
+def checkPurityImprovement(mva, box, locks) :
+    mvaCfg = mva.cfg.mvaCfg
+    currentPurity_p = getPurity(box.effEntries[mvaCfg["proc1"]] + sqrt(box.effEntries[mvaCfg["proc1"]]), box.effEntries[mvaCfg["proc2"]] - sqrt(box.effEntries[mvaCfg["proc2"]]))
+    currentPurity_m = getPurity(box.effEntries[mvaCfg["proc1"]] - sqrt(box.effEntries[mvaCfg["proc1"]]), box.effEntries[mvaCfg["proc2"]] + sqrt(box.effEntries[mvaCfg["proc2"]]))
+    foreseePurity_p = getPurity(mva.effEntries["Sig"][mvaCfg["proc1"]] + sqrt(mva.effEntries["Sig"][mvaCfg["proc1"]]), mva.effEntries["Sig"][mvaCfg["proc2"]] - sqrt(mva.effEntries["Sig"][mvaCfg["proc2"]]))
+    foreseePurity_m = getPurity(mva.effEntries["Sig"][mvaCfg["proc1"]] + sqrt(mva.effEntries["Sig"][mvaCfg["proc1"]]), mva.effEntries["Sig"][mvaCfg["proc2"]] - sqrt(mva.effEntries["Sig"][mvaCfg["proc2"]]))
+    currentPuritySig = puritySignifSubLeadProc(box.effEntries[mvaCfg["proc2"]], box.effEntries[mvaCfg["proc1"]])
+    foreseePuritySig = puritySignifSubLeadProc(mva.effEntries["Sig"][mvaCfg["proc2"]], mva.effEntries["Sig"][mvaCfg["proc1"]])
+    
+    a = 1/float(box.entries[mvaCfg["proc1"]])
+    b = 1/float(box.entries[mvaCfg["proc2"]])
+    currentPurity    = getPurity(a*box.entries[mvaCfg["proc1"]], b*box.entries[mvaCfg["proc2"]])
+    foreseePurity    = getPurity(a*mva.entries["Sig"][mvaCfg["proc1"]], b*mva.entries["Sig"][mvaCfg["proc2"]])
+    #deltaP_P=((foreseePurity-currentPurity)/currentPurity)
+    #if deltaP_P < box.cfg.mvaCfg["purityImprovementCriteria"] :
+    ####if (foreseePuritySig - currentPuritySig) <  box.cfg.mvaCfg["puritySigImprovementCriteria"]:
+    ####if max(currentPurity_p, currentPurity_m) > min(foreseePurity_p, foreseePurity_m):
+    eff_s_over_eff_b = mva.result[0]/mva.result[1] 
+    if eff_s_over_eff_b < box.cfg.mvaCfg["min_eff_s_over_eff_b"] :
+        with locks["stdout"]:
+            print "== Level {0}, box {1}: {2} was not discriminative enough...".format(box.level, box.name, mva.cfg.mvaCfg["name"])
+            print "Proc 1 - proc 2 entries now : {0} - {1}. Idem after cut : {2} - {3}".format(box.effEntries[mvaCfg["proc1"]], box.effEntries[mvaCfg["proc2"]], mva.effEntries["Sig"][mvaCfg["proc1"]], mva.effEntries["Sig"][mvaCfg["proc2"]])
+            print foreseePuritySig, " ", currentPuritySig, " ", box.cfg.mvaCfg["puritySigImprovementCriteria"] 
+        box.log("Proc 1 - proc 2 entries now : {0} - {1}. Idem after cut : {2} - {3}".format(box.effEntries[mvaCfg["proc1"]], box.effEntries[mvaCfg["proc2"]], mva.effEntries["Sig"][mvaCfg["proc1"]], mva.effEntries["Sig"][mvaCfg["proc2"]]))
+        box.log("Was not discriminative enough...")
+        return False
+    elif mva.entries["Sig"][mvaCfg["proc1"]] < box.cfg.mvaCfg["minmcevents_afterCut"] or mva.entries["Sig"][mvaCfg["proc2"]] < box.cfg.mvaCfg["minmcevents_afterCut"]:
+        with locks["stdout"]:
+            print "== Level {0}, box {1}: {2} lead to too few MC events after cut...".format(box.level, box.name, mva.cfg.mvaCfg["name"])
+            print "Proc 1 - proc 2 entries now : {0} - {1}. Idem after cut : {2} - {3}".format(box.effEntries[mvaCfg["proc1"]], box.effEntries[mvaCfg["proc2"]], mva.effEntries["Sig"][mvaCfg["proc1"]], mva.effEntries["Sig"][mvaCfg["proc2"]])
+        box.log("Proc 1 - proc 2 entries now : {0} - {1}. Idem after cut : {2} - {3}".format(box.effEntries[mvaCfg["proc1"]], box.effEntries[mvaCfg["proc2"]], mva.effEntries["Sig"][mvaCfg["proc1"]], mva.effEntries["Sig"][mvaCfg["proc2"]]))
+        box.log("Lead to too few MC events after cut...")
+        return False
+    else :
+        return True
 
 def defineNewCfgs(box, locks):
     """ Create specific tmva configuration objects ("PConfig") based on the current "box.cfg".
     Use them to create MVA objects ("MISAnalysis"), which are then stored in "box.MVA".
     Each of them will be used to launch a thread.."""
 
-    configs=[]
+    configs = []
     for proc1Name, proc1Dict in box.cfg.procCfg.items():
         if proc1Dict["signal"]==-3 or proc1Dict["signal"] == -5 or box.entries[proc1Name] < box.cfg.mvaCfg["minmcevents"] : 
             continue
         proc1Yield = box.yields[proc1Name]
         #allowedProcNames = [name for name in box.cfg.procCfg.keys() if name != proc1Name and box.cfg.procCfg[name]["signal"] != -3 and box.entries[name] > box.cfg.mvaCfg["minmcevents"]  ]
         for proc2Name in box.cfg.procCfg.keys() :
+            if proc2Name == proc1Name :
+                continue
+            #if "DYbb" in proc2Name + proc1Name and "DYxx" in proc2Name + proc1Name : 
+            #    continue
             proc2Yield = box.yields[proc2Name]
-            if proc1Yield >  proc2Yield and not (box.cfg.procCfg[proc2Name]["signal"]==-3 or box.cfg.procCfg[proc2Name]["signal"] == -5 or box.entries[proc2Name] < box.cfg.mvaCfg["minmcevents"]) :          # the second one will always be the one with the smallest yield (the bkg), avoid also to have DY_vs_TT and TT_vs_DY 
+            if proc1Yield >  proc2Yield and box.cfg.mvaCfg["analysisChoiceMode"] == "YieldsBased":
+                continue
+            if not ( box.cfg.procCfg[proc2Name]["signal"]==-3 or box.cfg.procCfg[proc2Name]["signal"] == -5 or box.entries[proc2Name] < box.cfg.mvaCfg["minmcevents"] ) :          # the "second one" is the bkg, we will cut in order to keep 50% of the "first one" 
                 thisCfg = copy.deepcopy(box.cfg)
                 proc2Dict = box.cfg.procCfg[proc2Name]
                 inputVar = []
                 #inputVar += proc2Dict["weightname"]
                 thisCfg.mvaCfg["name"] = proc1Name + "_vs_" + proc2Name
-                thisCfg.mvaCfg["inputvar"] =  [ "((atan(" + proc2Dict["weightname"][0] + "-" + proc1Dict["weightname"][0] + "))+1.6)/3.2" ]    
+                thisCfg.mvaCfg["inputvar"] =  [ "((atan(" + proc2Dict["weightname"][0] + "-" + proc1Dict["weightname"][0] + "))+1.6)/3.2" ] # Proc2 is "background" and signal is assumed to be on the right...
                 #thisCfg.mvaCfg["inputvar"] =  [ "((atan(" + proc1Dict["weightname"][0] + "/" + proc2Dict["weightname"][0] + "))+1.6)/3.2" ]    
                 #thisCfg.mvaCfg["inputvar"] = thisCfg.mvaCfg["otherinputvars"] + inputVar + proc1Dict["weightname"]
                 thisCfg.mvaCfg["splitname"] = thisCfg.mvaCfg["name"]
@@ -56,10 +100,11 @@ def defineNewCfgs(box, locks):
                 thisCfg.procCfg[proc1Name]["signal"]=1
                 thisCfg.procCfg[proc2Name]["signal"]=0
                 configs.append(thisCfg)
-                                 
     for config in configs:
         newMVA = MISAnalysis(box, config)
         box.MVA.append(newMVA)
+    if len(configs) == 0 :
+        box.IsEnd = True
 
 def analyseResults(box, locks):
     """ Based on the current box and the results stored in "box.MVA", decide what to do next. 
@@ -82,54 +127,41 @@ def analyseResults(box, locks):
             dict_yields_mva[str(mva.cfg.mvaCfg["sumYieldsOfSeparatedProc"])] = mva
             mvaConsideredProcYields.append(mva.cfg.mvaCfg["sumYieldsOfSeparatedProc"])
             box.log("Tried MVA {0}".format(mva.cfg.mvaCfg["name"]))
-        mvaConsideredProcYields.sort(reverse = True)
+        #consider first the mva separating the two smallest yields
+        mvaConsideredProcYields.sort(reverse = False)   #True)
         for yieldsKey in  mvaConsideredProcYields :
             mva = dict_yields_mva[str(yieldsKey)] 
-            mvaCfg = mva.cfg.mvaCfg
-            currentPurity_p = getPurity(box.effEntries[mvaCfg["proc1"]] + sqrt(box.effEntries[mvaCfg["proc1"]]), box.effEntries[mvaCfg["proc2"]] - sqrt(box.effEntries[mvaCfg["proc2"]]))
-            currentPurity_m = getPurity(box.effEntries[mvaCfg["proc1"]] - sqrt(box.effEntries[mvaCfg["proc1"]]), box.effEntries[mvaCfg["proc2"]] + sqrt(box.effEntries[mvaCfg["proc2"]]))
-            foreseePurity_p = getPurity(mva.effEntries["Sig"][mvaCfg["proc1"]] + sqrt(mva.effEntries["Sig"][mvaCfg["proc1"]]), mva.effEntries["Sig"][mvaCfg["proc2"]] - sqrt(mva.effEntries["Sig"][mvaCfg["proc2"]]))
-            foreseePurity_m = getPurity(mva.effEntries["Sig"][mvaCfg["proc1"]] + sqrt(mva.effEntries["Sig"][mvaCfg["proc1"]]), mva.effEntries["Sig"][mvaCfg["proc2"]] - sqrt(mva.effEntries["Sig"][mvaCfg["proc2"]]))
-            currentPuritySig = puritySignifSubLeadProc(box.effEntries[mvaCfg["proc2"]], box.effEntries[mvaCfg["proc1"]])
-            foreseePuritySig = puritySignifSubLeadProc(mva.effEntries["Sig"][mvaCfg["proc2"]], mva.effEntries["Sig"][mvaCfg["proc1"]])
-            if (foreseePuritySig - currentPuritySig) <  box.cfg.mvaCfg["puritySigImprovementCriteria"]:
-            #if max(currentPurity_p, currentPurity_m) > min(foreseePurity_p, foreseePurity_m):
-                with locks["stdout"]:
-                    print mva.cfg.mvaCfg["name"], " was not discriminative enough..."
-                    print "Proc 1 - proc 2 entries now : {0} - {1}. Idem after cut : {2} - {3}".format(box.effEntries[mvaCfg["proc1"]], box.effEntries[mvaCfg["proc2"]], mva.effEntries["Sig"][mvaCfg["proc1"]], mva.effEntries["Sig"][mvaCfg["proc2"]])
-                    print foreseePuritySig, " ", currentPuritySig, " ", box.cfg.mvaCfg["puritySigImprovementCriteria"] 
-                box.log("Proc 1 - proc 2 entries now : {0} - {1}. Idem after cut : {2} - {3}".format(box.effEntries[mvaCfg["proc1"]], box.effEntries[mvaCfg["proc2"]], mva.effEntries["Sig"][mvaCfg["proc1"]], mva.effEntries["Sig"][mvaCfg["proc2"]]))
-                box.log("Was not discriminative enough...")
-                continue
-            else : 
-                box.goodMVA = mva
+            if checkPurityImprovement(mva, box, locks) :
+                box.goodMVA = mva # Keep track of the MVA chosen to define the new sig- and bkg-like subsets. This must be specified before building a daughter box
                 box.log("== Level {0}: Found best MVA to be {1}.".format(box.level, box.goodMVA.cfg.mvaCfg["name"]))
                 with locks["stdout"]:
                     print "== Level {0}: Found best MVA to be {1}.".format(box.level, box.goodMVA.cfg.mvaCfg["name"])
                 break
-        if box.cfg.mvaCfg["removebadana"]:
-            for mva in succeededMVA :
-                if box.goodMVA != mva : 
-                    mva.log("Delete output files.")
-                    os.system("rm " + mva.cfg.mvaCfg["outputdir"] + "/" + mva.cfg.mvaCfg["name"] + "*")
-        if box.goodMVA is None :
-            box.isEnd = True
-            box.log("No mva reach the requested discrimination...")
-            return 0            
     
-    if box.cfg.mvaCfg["analysisChoiceMode"] ==  "DiscriBased":
-        goodMVA = [ mva for mva in succeededMVA if mva.result[1] < float(box.cfg.mvaCfg["maxbkgeff"]) ]
-        if len(goodMVA)==0:
-            box.isEnd = True
-            return 0
-        goodMVA.sort(reverse = True, key = lambda mva: mva.result[0]/mva.result[1])
-        with locks["stdout"]:
-            print "== Level {0}: Found best MVA to be {1}.".format(box.level, goodMVA[0].cfg.mvaCfg["name"])
-        box.goodMVA = goodMVA[0] # Keep track of the MVA chosen to define the new sig- and bkg-like subsets. This must be specified before building a daughter box (otherwise the daughter box will not know how she was conceived, poor thing...)
-        
+    elif box.cfg.mvaCfg["analysisChoiceMode"] ==  "DiscriBased":
+        succeededMVA.sort(reverse = True, key = lambda mva: mva.result[0]/mva.result[1])
+        for mva in succeededMVA :
+            if checkPurityImprovement(mva, box, locks) :
+                box.goodMVA = mva # Keep track of the MVA chosen to define the new sig- and bkg-like subsets. This must be specified before building a daughter box
+                box.log("== Level {0}: Found best MVA to be {1}.".format(box.level, box.goodMVA.cfg.mvaCfg["name"]))
+                with locks["stdout"]:
+                    print "== Level {0}: Found best MVA to be {1}.".format(box.level, box.goodMVA.cfg.mvaCfg["name"])
+                break
 
+    else:
+        print "Analysis choice must be 'DiscriBased' or 'YieldsBased'. Exiting."
+        sys.exit()
 
+    if box.cfg.mvaCfg["removebadana"]:
+        for mva in succeededMVA :
+            if box.goodMVA != mva : 
+                mva.log("Delete output files.")
+                os.system("rm " + mva.cfg.mvaCfg["outputdir"] + "/" + mva.cfg.mvaCfg["name"] + "*")
 
+    if box.goodMVA is None :
+        box.isEnd = True
+        box.log("No mva passed the various requirements...")
+        return 0            
 
     cfgSigLike = copy.deepcopy(box.goodMVA.cfg)
     cfgSigLike.mvaCfg["outputdir"]=box.goodMVA.cfg.mvaCfg["outputdir"] + "/" + box.goodMVA.cfg.mvaCfg["name"] + "_SigLike"
@@ -156,13 +188,13 @@ def analyseResults(box, locks):
     sigBox = MISBox(parent = box, cfg = cfgSigLike, type = "Sig") # "sigBox" will be a daughter of "box", and "box" the parent of "sigBox"
     bkgBox = MISBox(parent = box, cfg = cfgBkgLike, type = "Bkg")
     box.goodMVA.sigLike = sigBox # Keep track that the sig-like subset of this MVA is the box we have just defined
-    box.goodMVA.bkgLike = bkgBox # Keep track that the sig-like subset of this MVA is the box we have just defined
+    box.goodMVA.bkgLike = bkgBox # Keep track that the bkg-like subset of this MVA is the box we have just defined
     if box.level > box.cfg.mvaCfg["maxlevel"]-1 :
         box.log("Will stop branching at the next iteration because max layer is reached.")
         print "Will stop branching at the next iteration because max layer is reached."
         sigBox.isEnd = True # If we want to stop here (usually, when stopping, we have NO goodMVA)
         bkgBox.isEnd = True # If we want to stop here (usually, when stopping, we have NO goodMVA)
-    
+
 
 if __name__ == "__main__":
     print "Do not run on this file."

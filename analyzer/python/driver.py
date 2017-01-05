@@ -97,8 +97,9 @@ class tryMisChief(Thread):
         # Define threads with the new configurations
         threads = []
         for thisMVA in self.box.MVA:
-            myThread = launchMisChief(thisMVA, self.locks)
-            threads.append(myThread)
+            if not thisMVA is None :
+                myThread = launchMisChief(thisMVA, self.locks)
+                threads.append(myThread)
         
         self.box.log("Will start " + str(len(threads)) + " threads.")
         with self.locks["stdout"]:

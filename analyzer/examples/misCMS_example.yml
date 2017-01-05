@@ -12,7 +12,7 @@ datasets:
         # 1 ... Will be trained on, considered to be THE signal (given here for completeness: this code is used by tmva, and using it here might cause the tree-building strategy function to produce unexpected results).
         signal: -1
         # Any Root color, with composition (eg. kRed+1):
-        color: 400-7
+        color: 924
         xsection: 27.31 # in pb
         genevents: 12011428
         # Name of the TTree containing the events
