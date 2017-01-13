@@ -64,7 +64,7 @@ def mcStudyMain(mcStudyFile):
             
             if proc["signal"] == 1:
                 
-                myHist = ROOT.TH1D(name+"_hist", name+"/\Lambda^2 (TeV^{-2})", 100, -0.1, 0.1)
+                myHist = ROOT.TH1D(name+"_hist", name+" SF ", 100, -0.1, 0.1)
                 myHist.SetCanExtend(ROOT.TH1.kXaxis)
                 myHist.SetDirectory(subDir)
                 histDict[name] = myHist

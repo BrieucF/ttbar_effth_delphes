@@ -20,7 +20,7 @@ datasets:
         # Weight under the corresponding hypothesis. If left blank, "otherinputvar" is used as training variables.
         weightname: [pp_tt_llbb_tfJetAllEta_minLog_weight]
         # Formula used to get the event weights from branches in the TTree (ex: GenWeight*BTagScale)
-        evtweight: jjbtag*pu*event_weight*trigeff*llidiso*0.954
+        evtweight: jjbtag*pu*event_weight*trigeff*llidiso*0.9543
 #    DY:
 #        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
 #        signal: -1
@@ -38,7 +38,7 @@ datasets:
         genevents: 4923952988160
         treename: t
         weightname: [pp_Z_llbb_simple_tfJetAllEta_minLog_weight]
-        evtweight: jjbtag*pu*event_weight*trigeff*llidiso*0.782
+        evtweight: jjbtag*pu*event_weight*trigeff*llidiso*0.78114
     tbarWp:
         path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
         signal: -1
@@ -77,7 +77,7 @@ datasets:
         weightname: [pp_zh_llbb_simple_tfJetAllEta_minLog_weight]
         evtweight: jjbtag*pu*event_weight*trigeff*llidiso
 #    data_obs:
-#        path: ["/home/fynu/bfrancois/storage/RDS/5320_CSV_Skimmed_V5/llbbX/Data2012_Summer12_final_skimed_llbbX_withWeights_V1.root"]
+#        path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/DoubleEG_Run2015D-16Dec2015-v2_2016-03-03_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root", "/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/DoubleMuon_Run2015D-16Dec2015-v1_2016-03-03_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root", "/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_btagTight/condor/output/MuonEG_Run2015D-16Dec2015-v1_2016-03-03_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
 #        signal: -5
 #        color: kBlack
 #        xsection: 1      
@@ -89,9 +89,9 @@ datasets:
 
 # Analysis: define options relative to the tree building (used by driver.py) and the MVA training (used by tmva)
 analysis:
-    name: minmc_50_effRatio_3_discriBased #tight_btag_s_over_b_smallestyields   #purMinMax_withZh   #DYbbxx_vs_bx_noZh_PurityPM
+    name: minmc_50_effRatio_2_discriBased #tight_btag_s_over_b_smallestyields   #purMinMax_withZh   #DYbbxx_vs_bx_noZh_PurityPM
     #outputdir: results/smallestYieldsFirst_keepSmallYield_fullPhaseSpace_SF_noZh_DYxx_DYbx_DYbb_Sig01_1Lvl   #results/purMinMax_withZh   #results/DYbbxx_vs_bx_noZh_PurityPM    #zh_LogDiff_with60weight_keepBigYield_withZh
-    outputdir: results/minmc_50_effRatio_3_discriBased #results/tight_btag_s_over_b_smallestyields #results/significance_v0   #results/purMinMax_withZh   #results/DYbbxx_vs_bx_noZh_PurityPM    #zh_LogDiff_with60weight_keepBigYield_withZh
+    outputdir: results/minmc_50_effRatio_2_discriBased #results/tight_btag_s_over_b_smallestyields #results/significance_v0   #results/purMinMax_withZh   #results/DYbbxx_vs_bx_noZh_PurityPM    #zh_LogDiff_with60weight_keepBigYield_withZh
     # Use these variables for training, in addition to the MEM-weights (if given)
     otherinputvars: []
     # Weights common to all the processes, which will be passed to TMVA during training
@@ -118,12 +118,12 @@ analysis:
     # Consider analysis valid if the purity significance is imporved byt at least puritySigImprovementCriteria units
     puritySigImprovementCriteria: 3
     purityImprovementCriteria: 0.3
-    min_eff_s_over_eff_b: 3 
-    minmcevents_afterCut: 10
+    min_eff_s_over_eff_b: 2 
+    minmcevents_afterCut: 1
     # pb-1
     lumi: 2300
     # Bins in the histos used to draw the ROC curve and find cut value
-    histbins: 100
+    histbins: 500
     # Plotbins better be an exact divider of histbins (to be used in the "fancy plot")
     plotbins: 50
     # Low and high edge for all histograms used (will not affect the cut value!)
@@ -135,7 +135,7 @@ analysis:
     # Min. number of expected events in a bin of any MVA template
     minbincontent: 1
     # Remove analysis results that were found to be non-optimal (true / false)
-    removebadana: false
+    removebadana: true
     # Remove from list of signals those that have already been trained against (true / false). NOTE: not yet implemented
     removefrompool: false
     # Stop considering a process for splitting if it has less than minmcevents events

@@ -65,4 +65,4 @@ analysis:
   
   # If "get" mode: specify file containing all the histograms.
   # If every process has a different file, put a "histfile" for each process INSTEAD of here
-  histfile: results/discriBased/discriBased_hists.root
+  histfile: results/minmc_50_effRatio_2_discriBased/minmc_50_effRatio_2_discriBased_hists.root

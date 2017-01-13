@@ -1,0 +1,11 @@
+jjbtag jjbtag_up
+jjbtag jjbtag_down
+
+llidiso llidiso_elidisoup
+llidiso llidiso_elidisodown
+
+llidiso llidiso_muidup
+llidiso llidiso_muiddown
+
+llidiso llidiso_muisoup
+llidiso llidiso_muisodown

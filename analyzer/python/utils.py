@@ -10,6 +10,7 @@ import copy
 import sys
 import ROOT
 import yaml
+import random
 
 ######## valueToString #####################################################
 
@@ -261,11 +262,19 @@ def getEntriesEffentriesYieldTuple(fileName, procDict, lumi):
         entriesEffEntriesYield.append(0)
         return entriesEffEntriesYield
     
-    histName = str(hash(fileName[0]))
+
+    #print fileName[0]
+    #print fileName
+    #print procDict
+    histName = str(random.random())
+    #print histName
+    tempHist = ROOT.TH1F(histName, histName, 1, 0, sys.maxint)
     myChain.Draw("Entries$>>" + histName, procDict["evtweight"], "goff")
-    tempHist = ROOT.gDirectory.Get(histName)
-    if tempHist is None or not isinstance(tempHist, ROOT.TH1):
-        return None
+    #histName = str(hash(fileName[0]))
+    #myChain.Draw("Entries$>>" + histName, procDict["evtweight"], "goff")
+    #tempHist = ROOT.gDirectory.Get(histName)
+    #if tempHist is None or not isinstance(tempHist, ROOT.TH1):
+    #    return None
     effEntriesError = ROOT.Double(0)
     effEntries = tempHist.IntegralAndError(0, tempHist.GetNbinsX()+1, effEntriesError);
     
@@ -279,6 +288,7 @@ def getEntriesEffentriesYieldTuple(fileName, procDict, lumi):
         entriesEffEntriesYield.append(entries)
     
     myChain.IsA().Destructor(myChain)
+    #myChain.Reset()
     tempHist.IsA().Destructor(tempHist)
     
     return entriesEffEntriesYield

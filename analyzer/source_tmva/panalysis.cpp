@@ -591,6 +591,8 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
   double bestSBsig = 0, bestSBbkg = 0;
   double sigEff_SB = 0, bkgEff_SB = 0, sigEff_SRootB = 0, bkgEff_SRootB = 0, sigEff_SRootSB = 0, bkgEff_SRootSB = 0;
 
+  double max_efficiency = 0.99999;
+
   for(int i=0; i<=myConfig->GetHistBins()+1; i++){
     expSig = (double) myProc.at(mySig)->GetHist()->IntegralAndError(i, myConfig->GetHistBins()+1, expSig_err);
     expSig_err = expSig_err;
@@ -605,15 +607,15 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
     if (expBkg <= 0 || expSig <= 0)
       continue;
 
-    tempSB_down = expSig/expBkg - (expSig/expBkg)*sqrt(pow(expSig_err/expSig, 2) + pow(expBkg_err/expBkg, 2));
+    tempSB_down = expSig/expBkg - std::abs(expSig/expBkg)*sqrt(pow(expSig_err/expSig, 2) + pow(expBkg_err/expBkg, 2));
     tempSRootB_down = expSig/sqrt(expBkg) - sqrt( pow(expSig_err, 2)/expBkg + pow(expSig*expBkg_err, 2)/(4*pow(expBkg, 3)) );
     tempSRootSB_down = expSig/sqrt(expBkg+expSig) - sqrt(pow(((sqrt(expSig+expBkg) - expSig/(2*sqrt(expBkg+expSig)))*expSig_err)/(expBkg+expSig), 2) + pow(expSig*expBkg_err/2, 2)*pow(expBkg+expSig,-3));
     if(i > 1){
       if(tempSB_down > sB_down){
         bestSBsig = expSig;
         bestSBbkg = expBkg;
-        sigEff_SB = expSig/totExpSig;
-        bkgEff_SB = expBkg/totExpBkg;
+        sigEff_SB = std::min(expSig/totExpSig, max_efficiency);
+        bkgEff_SB = std::min(expBkg/totExpBkg, max_efficiency);
         sB = expSig/expBkg;
         sB_down = tempSB_down;
         bestCutSB = myProc.at(mySig)->GetHist()->GetBinLowEdge(i);
@@ -621,15 +623,15 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
       if(tempSRootB_down > SRootB_down){
         SRootB = expSig/sqrt(expBkg);
         SRootB_down = tempSRootB_down;
-        sigEff_SRootB = expSig/totExpSig;
-        bkgEff_SRootB = expBkg/totExpBkg;
+        sigEff_SRootB = std::min(expSig/totExpSig, max_efficiency);
+        bkgEff_SRootB = std::min(expBkg/totExpBkg, max_efficiency);
         bestCutSRootB = myProc.at(mySig)->GetHist()->GetBinLowEdge(i);
       }
       if(tempSRootSB_down > SRootSB_down){
         SRootSB = expSig/sqrt(expBkg+expSig);
         SRootSB_down = tempSRootSB_down;
-        sigEff_SRootSB = expSig/totExpSig;
-        bkgEff_SRootSB = expBkg/totExpBkg;
+        sigEff_SRootSB = std::min(expSig/totExpSig, max_efficiency);
+        bkgEff_SRootSB = std::min(expBkg/totExpBkg, max_efficiency);
         bestCutSRootSB = myProc.at(mySig)->GetHist()->GetBinLowEdge(i);
       }
     }
@@ -656,7 +658,14 @@ void PAnalysis::WPFromFigureOfMerit(void){
     #ifdef P_LOG
       cout << "No down fluctuated figure of merit is bigger than 0 " << endl; //, switching to fixed efficiency mode." << endl;
     #endif
+    exit(1);
     //BkgEffWPPrecise();
+  }
+  else if (myBkgEff == 1) {
+    #ifdef P_LOG
+      cout << "Best down fluctuated figure of merit lead to no background rejection " << endl; //, switching to fixed efficiency mode." << endl;
+    #endif
+    exit(1);
   }
   else{
     #ifdef P_LOG
@@ -724,11 +733,11 @@ void PAnalysis::WriteSplitRootFiles(void){
   
     // Adding this MVA's output to the output trees
     double mvaOutput;
-    TString outBranchName = "MVAOUT__" + outputDir + "/" + myName;
-    outBranchName.ReplaceAll("//","__");
-    outBranchName.ReplaceAll("/","__");
-    treeSig->Branch(outBranchName, &mvaOutput);
-    treeBkg->Branch(outBranchName, &mvaOutput);
+    //TString outBranchName = "MVAOUT__" + outputDir + "/" + myName;
+    //outBranchName.ReplaceAll("//","__");
+    //outBranchName.ReplaceAll("/","__");
+    //treeSig->Branch(outBranchName, &mvaOutput);
+    //treeBkg->Branch(outBranchName, &mvaOutput);
     
     for(long i=0; i<proc->GetTree()->GetEntries(); i++){
       proc->GetTree()->GetEntry(i);

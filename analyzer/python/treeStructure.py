@@ -304,6 +304,8 @@ class MISTree:
         countForComp = 0
 
         for name, proc in processes:
+            print name
+            print i
     
             treeYields[name] = ROOT.TH1D(name + "_yields", "Branch yields for " + name, nBr, 0, nBr)
             treeYields[name].Sumw2()
@@ -328,6 +330,7 @@ class MISTree:
             branchEffs.GetYaxis().SetBinLabel(i+1, name)
  
             for j,box in enumerate(endBoxes):
+                print box.name
 
                 branchEffEntries = box.effEntries[name]
                 branchYield = box.yields[name]
@@ -372,7 +375,13 @@ class MISTree:
         branchTotals.Merge(lst)
         for j in range(1, nBr+1):
             for i in range(1, nProcForBrComp+1):
+                if branchTotals.GetBinContent(j) > 0 :
                     branchComps.SetBinContent(j, i, 100.* branchYieldsForComp.GetBinContent(j, i) / branchTotals.GetBinContent(j) )
+                else :
+                    print "Zero total entries ", branchTotals.GetBinContent(j)
+                    print i
+                    print j
+                    branchComps.SetBinContent(j, i, 0)
     
         file.cd()
 
@@ -434,6 +443,7 @@ class MISTree:
         if fileName == "":
             fileName = self.cfg.mvaCfg["outputdir"] + "/" + self.cfg.mvaCfg["name"] + "_tree.p"
 
+        sys.setrecursionlimit(100000)
         print "== Saving tree to pickle file " + fileName + "."
         self.log("Saving analysis results to pickle file " + fileName + ".")
         

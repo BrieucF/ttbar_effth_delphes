@@ -1,6 +1,7 @@
 import array, os, sys
 import ROOT
 
+ROOT.TH1.AddDirectory = False
 def ensure_dir(f):
     d = os.path.dirname(f)
     if not os.path.exists(d):
@@ -102,12 +103,14 @@ class TMVAReplayer:
 
 
     
-    def __init__(self, configuration, root):
+    def __init__(self, configuration, root, datasets = None):
         self.configuration = configuration
-        datasets = configuration["datasets"]
-        if len(datasets.keys()) > 1:
-            print("Error: only one dataset is supported for replay for the moment")
-            sys.exit(1)
+        #datasets = configuration["datasets"]
+        #print datasets
+        #if len(datasets.keys()) > 1:
+        #    print("Error: only one dataset is supported for replay for the moment")
+        #    sys.exit(1)
+        print datasets
 
         name, data = datasets.iterkeys().next(), datasets.itervalues().next()
         self.inputDataset = data
@@ -151,6 +154,7 @@ class TMVAReplayer:
 
             f = ROOT.TFile(path, "recreate")
             chain = self.chain.CloneTree(0)
+            chain.SetDirectory(0)
 
             endNode = TMVAReplayer.EndNodeData(node.name, f, chain)
             self.numberOfEndNodes = self.numberOfEndNodes + 1
@@ -168,12 +172,14 @@ class TMVAReplayer:
             parent = treeNode.parent
             while treeNode is not None:
 
-                branchName = "MVAOUT__%s" % (treeNode.data.name.replace("/", "_"))
-                chain.Branch(branchName, treeNode.data.mvaValue, branchName + "/F")
+                #branchName = "MVAOUT__%s" % (treeNode.data.name.replace("/", "_"))
+                #chain.Branch(branchName, treeNode.data.mvaValue, branchName + "/F")
 
                 treeNode = parent
                 if treeNode is not None:
                     parent = treeNode.parent
+            chain.Reset()
+            #f.Close()
 
 
     def linkInputVariables(self, mva, mvaNode):
@@ -238,7 +244,8 @@ class TMVAReplayer:
 
         datasetWeight = (xsection * lumi) / ngen
 
-        summaryName = "%s_yields" % (self.name)
+        #summaryName = "%s_yields" % (self.name)
+        summaryName = "yields"
         self.summaryHist = ROOT.TH1F(summaryName, summaryName, self.numberOfEndNodes, 0, self.numberOfEndNodes)
         self.summaryHist.SetDirectory(0)
         self.summaryHist.Sumw2()
@@ -311,17 +318,19 @@ class TMVAReplayer:
         def writeFile(node):
             print("%.2f expected events in node '%s'" % (node.data.entries, node.data.name))
             node.data.file.Write()
+            node.data.file.Close()
 
         self.runOnEndNodes(self.treeRoot, writeFile)
 
         def setBinLabels(node):
-            self.summaryHist.GetXaxis().SetBinLabel(node.data.binNumber, node.data.name)
+            self.summaryHist.GetXaxis().SetBinLabel(node.data.binNumber, str(node.data.binNumber))
 
         self.runOnEndNodes(self.treeRoot, setBinLabels)
 
-        f = ROOT.TFile(os.path.join(self.outputDirectory, "%s_hists.root" % self.name), "recreate")
+        f = ROOT.TFile(os.path.join(self.outputDirectory, "%s_histos.root" % self.name), "recreate")
         self.summaryHist.Write()
         f.Close()
+        self.chain.Reset()
 
 
     @staticmethod

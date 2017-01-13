@@ -97,7 +97,7 @@ class tryMisChief(Thread):
         # Define threads with the new configurations
         threads = []
         for thisMVA in self.box.MVA:
-            if not thisMVA is None :
+            #if not thisMVA is None :
                 myThread = launchMisChief(thisMVA, self.locks)
                 threads.append(myThread)
         
@@ -171,18 +171,20 @@ class launchMisChief(Thread):
             yaml.dump(mvaConfig, configFile)
 
         # launch the program on this config file
-        commandString = tmvaExec + " " + configFileName
-        commandString += " > " + self.MVA.cfg.mvaCfg["outputdir"] + "/" + self.MVA.cfg.mvaCfg["name"] + ".log 2>&1"
+        commandString = [tmvaExec, configFileName]
 
         # it would be annoying if, say, outputdir was "&& rm -rf *"
-        if commandString.find("&&") >= 0 or commandString.find("|") >= 0:
+        if " ".join(commandString).find("&&") >= 0 or " ".join(commandString).find("|") >= 0:
             with self.locks["stdout"]:
                 print "== Looks like a security issue..."
             sys.exit(1)
 
-        self.MVA.log("Calling " + commandString + ".")
+        self.MVA.log("Calling " + " ".join(commandString) + ".")
 
-        result = call(commandString, shell=True)
+        logFile = os.path.join(self.MVA.cfg.mvaCfg["outputdir"], self.MVA.cfg.mvaCfg["name"] + ".log")
+
+        with open(logFile, 'w') as f:
+            result = call(commandString, stdout=f, stderr=f)
 
         self.MVA.log("\n====== Start tmva log file =======")
         with open(os.path.join(self.MVA.cfg.mvaCfg["outputdir"], self.MVA.cfg.mvaCfg["outputname"]) + ".log") as logFile:
@@ -193,7 +195,7 @@ class launchMisChief(Thread):
         self.MVA.outcode = result
         if result != 0:
             with self.locks["stdout"]:
-                print "== Something went wrong (error code " + str(result) + ") in analysis " + self.MVA.cfg.mvaCfg["outputdir"] + "/" + self.MVA.cfg.mvaCfg["name"] + "."
+                print "== Analysis " + self.MVA.cfg.mvaCfg["outputdir"] + "/" + self.MVA.cfg.mvaCfg["name"] + " rejected (output code " + str(result) + ")."
         else:
             self.MVA.fetchResults(self.locks)
         

@@ -17,7 +17,6 @@ configuration = {}
 # Parse configuration
 with open(args.config) as f:
     configuration = yaml.load(f)
-
     with open(configuration["analysis"]["trained_tree"]) as g:
         tree = pickle.Unpickler(g).load()
 
@@ -25,5 +24,9 @@ with open(args.config) as f:
         tree.cfg.procCfg = {}
 
         root = tree.firstBox
-        mvaReader = TMVAReplayer.TMVAReplayer(configuration, root)
-        mvaReader.run()
+        #mvaReader = TMVAReplayer.TMVAReplayer(configuration, root)
+        #mvaReader.run()
+        for datasets_key in configuration["datasets"].keys():
+            datasets = configuration["datasets"][datasets_key]
+            mvaReader = TMVAReplayer.TMVAReplayer(configuration, root, {datasets_key : datasets})
+            mvaReader.run()
