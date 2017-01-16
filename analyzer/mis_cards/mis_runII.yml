@@ -115,6 +115,7 @@ analysis:
     workingpoint: 0.5
     # Do we choose the analysis based on Yield or discrimination :  "DiscriBased" or "YieldsBased" 
     analysisChoiceMode: "DiscriBased"  #"YieldsBased"  
+    oneVSall: true
     # Consider analysis valid if the purity significance is imporved byt at least puritySigImprovementCriteria units
     puritySigImprovementCriteria: 3
     purityImprovementCriteria: 0.3
