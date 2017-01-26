@@ -582,10 +582,13 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
   double sB_down = 0, SRootB_down = 0, SRootSB_down = 0;
 
   double totExpBkg = 0, totExpSig = (double) myProc.at(mySig)->GetHist()->Integral(0, myConfig->GetHistBins()+1);
+  TH1D* bkg_th1 = new TH1D("Bkgth1", "Bkgth1", myConfig->GetHistBins(), myConfig->GetHistLoX(), myConfig->GetHistHiX()); 
+  bkg_th1->Sumw2();
   for(unsigned int j=0; j<myBkgs.size(); j++){
-    totExpBkg += (double) myProc.at(myBkgs.at(j))->GetHist()->Integral(0, myConfig->GetHistBins()+1);
+    bkg_th1->Add(myProc.at(myBkgs.at(j))->GetHist());
   }  
-  double expBkg, expBkg_err, tempExpBkg_err, expSig, expSig_err;
+  totExpBkg = bkg_th1->Integral(0, myConfig->GetHistBins()+1);
+  double expBkg, expBkg_err, expSig, expSig_err;
   double tempSB_down, tempSRootB_down, tempSRootSB_down;
   double bestCutSB = std::numeric_limits<double>::lowest(), bestCutSRootB = std::numeric_limits<double>::lowest(), bestCutSRootSB = std::numeric_limits<double>::lowest();
   double bestSBsig = 0, bestSBbkg = 0;
@@ -596,14 +599,8 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
   for(int i=0; i<=myConfig->GetHistBins()+1; i++){
     expSig = (double) myProc.at(mySig)->GetHist()->IntegralAndError(i, myConfig->GetHistBins()+1, expSig_err);
     expSig_err = expSig_err;
-    expBkg = 0;
-    expBkg_err = 0;
-    for(unsigned int j=0; j<myBkgs.size(); j++){
-      expBkg += (double) myProc.at(myBkgs.at(j))->GetHist()->IntegralAndError(i, myConfig->GetHistBins()+1, tempExpBkg_err);
-      tempExpBkg_err = tempExpBkg_err;
-      expBkg_err += tempExpBkg_err*tempExpBkg_err;
-    }
-    expBkg_err = sqrt(expBkg_err);
+    expBkg = bkg_th1->IntegralAndError(i, myConfig->GetHistBins()+1, expBkg_err);
+    expBkg_err = expBkg_err;
     if (expBkg <= 0 || expSig <= 0)
       continue;
 
@@ -636,6 +633,7 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
       }
     }
   }
+  delete bkg_th1;
   #ifdef P_LOG
     cout << "Found best figures:" << endl;
     cout << "  S/B = " << sB << " if we cut at " << bestCutSB << ". We have then " << bestSBsig << " signal events and " << bestSBbkg << " background events." << endl;

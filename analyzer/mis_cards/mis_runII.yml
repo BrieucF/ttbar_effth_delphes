@@ -89,9 +89,9 @@ datasets:
 
 # Analysis: define options relative to the tree building (used by driver.py) and the MVA training (used by tmva)
 analysis:
-    name: minmc_50_effRatio_2_discriBased #tight_btag_s_over_b_smallestyields   #purMinMax_withZh   #DYbbxx_vs_bx_noZh_PurityPM
+    name:  one_vs_all_yieldErrorProtection_50pc #minmc_50_effRatio_2_discriBased #tight_btag_s_over_b_smallestyields   #purMinMax_withZh   #DYbbxx_vs_bx_noZh_PurityPM
     #outputdir: results/smallestYieldsFirst_keepSmallYield_fullPhaseSpace_SF_noZh_DYxx_DYbx_DYbb_Sig01_1Lvl   #results/purMinMax_withZh   #results/DYbbxx_vs_bx_noZh_PurityPM    #zh_LogDiff_with60weight_keepBigYield_withZh
-    outputdir: results/minmc_50_effRatio_2_discriBased #results/tight_btag_s_over_b_smallestyields #results/significance_v0   #results/purMinMax_withZh   #results/DYbbxx_vs_bx_noZh_PurityPM    #zh_LogDiff_with60weight_keepBigYield_withZh
+    outputdir: results/one_vs_all_yieldErrorProtection_50pc #results/tight_btag_s_over_b_smallestyields #results/significance_v0   #results/purMinMax_withZh   #results/DYbbxx_vs_bx_noZh_PurityPM    #zh_LogDiff_with60weight_keepBigYield_withZh
     # Use these variables for training, in addition to the MEM-weights (if given)
     otherinputvars: []
     # Weights common to all the processes, which will be passed to TMVA during training
@@ -136,12 +136,12 @@ analysis:
     # Min. number of expected events in a bin of any MVA template
     minbincontent: 1
     # Remove analysis results that were found to be non-optimal (true / false)
-    removebadana: true
+    removebadana: false
     # Remove from list of signals those that have already been trained against (true / false). NOTE: not yet implemented
     removefrompool: false
     # Stop considering a process for splitting if it has less than minmcevents events
     # MUST BE AT LEAST TWICE AS LARGE AS TRAINENTRIES
-    minmcevents: 50
+    minmcevents: 1
     # If not enough MC events to train a new NN, still keep the previous results if there
     # are at least that many events. Otherwise, stop branching. Set to 0 if no check needed.
     minkeepevents: 0

@@ -279,9 +279,9 @@ def getEntriesEffentriesYieldTuple(fileName, procDict, lumi):
     effEntries = tempHist.IntegralAndError(0, tempHist.GetNbinsX()+1, effEntriesError);
     
     if procDict["signal"] != -5: 
-        entriesEffEntriesYield.append(effEntries)
-        entriesEffEntriesYield.append(lumi*procDict["xsection"]*effEntries/procDict["genevents"])
-        entriesEffEntriesYield.append(lumi*procDict["xsection"]*effEntriesError/procDict["genevents"])
+        entriesEffEntriesYield.append(effEntries) # effentries
+        entriesEffEntriesYield.append(lumi*procDict["xsection"]*effEntries/procDict["genevents"]) # yield
+        entriesEffEntriesYield.append(lumi*procDict["xsection"]*effEntriesError/procDict["genevents"]) # error on the yield
     else:
         entriesEffEntriesYield.append(entries)
         entriesEffEntriesYield.append(entries)

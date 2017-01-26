@@ -233,7 +233,10 @@ def mcStudyTemplate(templateCfg, params, histDict, pseudoNumber):
         
         for name,proc in templateCfg.procCfg.items():
             if proc["signal"] == 1:
-                weighteddsquare += (result[name]/err[name])**2
+                if err[name] == 0 :
+                    print "Error equal to zero for : ", name
+                else :
+                    weighteddsquare += (result[name]/err[name])**2
                 
                 for name2,proc2 in templateCfg.procCfg.items():
                     if proc2["signal"] == 1:

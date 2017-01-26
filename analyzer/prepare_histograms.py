@@ -15,7 +15,7 @@ if not os.path.isdir(out_dir):
 
 # Extract the list of processes : 
 nominal_file_dir = base_directory + "/replay_nominal/"
-fileList = [file for file in  os.listdir(nominal_file_dir) if "_hists.root" in file] 
+fileList = [file for file in  os.listdir(nominal_file_dir) if "_histos.root" in file] 
 for file in fileList :
     print "Treating ", file
     # Nominal TH1

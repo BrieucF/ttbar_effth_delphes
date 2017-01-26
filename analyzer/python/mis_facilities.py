@@ -1168,7 +1168,7 @@ def main():
   splitMode = "bothCSV_njets" #bothCSV_njets, CSVprod, jetNumb
 
   #listProc=["DY","TT","ZZ","ZH","WW","WZ","Data"]
-  listProc=["DYbx","DYbb","DYxx","TT","ZZ","ZH","WW","WZ","ZA","data_obs"]
+  listProc=["DY","TT","ZZ","ZH","tWm","tbarWp"]
   #inFile="results/purMinMax_withZh_DYsplit_Pur1/purMinMax_withZh_results.out"
   inFile=myConfig.mvaCfg["outputdir"]+"/"+myConfig.mvaCfg["name"]+"_results.out"
   

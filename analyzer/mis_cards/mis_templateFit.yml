@@ -4,7 +4,7 @@ datasets:
   TT:
     # 0 --> not fitted, 1 --> fitted
     signal: 1
-    range: [0.5,1.5]
+    range: [0.9,1.1]
     histname: TT_yields
   DY:
     signal: 1
@@ -16,15 +16,15 @@ datasets:
     histname: ZZ_yields
   ZH:
     signal: 1
-    range: [-50,50]
+    range: [-20,20]
     histname: ZH_yields
   tbarWp:
     signal: 1
-    range: [-50,50]
+    range: [-20,20]
     histname: tbarWp_yields
   tWm:
     signal: 1
-    range: [-50,50]
+    range: [-20,20]
     histname: tWm_yields
 #  OtG:
 #    # Fitted
@@ -65,4 +65,4 @@ analysis:
   
   # If "get" mode: specify file containing all the histograms.
   # If every process has a different file, put a "histfile" for each process INSTEAD of here
-  histfile: results/minmc_50_effRatio_2_discriBased/minmc_50_effRatio_2_discriBased_hists.root
+  histfile: results/one_vs_all_yieldErrorProtection_50pc/one_vs_all_yieldErrorProtection_50pc_hists.root
