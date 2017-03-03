@@ -44,15 +44,15 @@ def checkPurityImprovement(mva, box, locks) :
         yield_error_bkg += mva.yieldsErrors["Bkg"][procName]*mva.yieldsErrors["Bkg"][procName]
     yield_error_sig = sqrt(yield_error_sig)
     yield_error_bkg = sqrt(yield_error_bkg)
-    if yield_error_bkg > 0.5*yield_bkg or yield_error_sig > 0.5*yield_sig : 
-        with locks["stdout"]:
-            print "== Level {0}, box {1}: {2} lead to yields with more than 100% error in one of the daughter box...".format(box.level, box.name, mva.cfg.mvaCfg["name"])
-            print "     Sig box : %s +- %s"%(yield_sig, yield_error_sig)
-            print "     Bkg box : %s +- %s"%(yield_bkg, yield_error_bkg)
-            box.log("== Level {0}, box {1}: {2} lead to yields with more than 100% error in one of the daughter box...".format(box.level, box.name, mva.cfg.mvaCfg["name"]))
-            box.log("     Sig box : %s +- %s"%(yield_sig, yield_error_sig))
-            box.log("     Bkg box : %s +- %s"%(yield_bkg, yield_error_bkg))
-            return False
+    #if yield_error_bkg > 0.5*yield_bkg or yield_error_sig > 0.5*yield_sig : 
+    #    with locks["stdout"]:
+    #        print "== Level {0}, box {1}: {2} lead to yields with more than 100% error in one of the daughter box...".format(box.level, box.name, mva.cfg.mvaCfg["name"])
+    #        print "     Sig box : %s +- %s"%(yield_sig, yield_error_sig)
+    #        print "     Bkg box : %s +- %s"%(yield_bkg, yield_error_bkg)
+    #        box.log("== Level {0}, box {1}: {2} lead to yields with more than 100% error in one of the daughter box...".format(box.level, box.name, mva.cfg.mvaCfg["name"]))
+    #        box.log("     Sig box : %s +- %s"%(yield_sig, yield_error_sig))
+    #        box.log("     Bkg box : %s +- %s"%(yield_bkg, yield_error_bkg))
+    #        return False
 
      #currentPurity_p = getPurity(box.effEntries[mvaCfg["proc1"]] + sqrt(box.effEntries[mvaCfg["proc1"]]), box.effEntries[mvaCfg["proc2"]] - sqrt(box.effEntries[mvaCfg["proc2"]]))
      #currentPurity_m = getPurity(box.effEntries[mvaCfg["proc1"]] - sqrt(box.effEntries[mvaCfg["proc1"]]), box.effEntries[mvaCfg["proc2"]] + sqrt(box.effEntries[mvaCfg["proc2"]]))
@@ -105,7 +105,7 @@ def defineNewCfgs(box, locks):
                 thisCfg = copy.deepcopy(box.cfg)
                 #inputVar += proc2Dict["weightname"]
                 thisCfg.mvaCfg["name"] = proc1Name + "_vs_all"
-                string_input_var =  "((atan(MEANBKGWEIGHT-" + proc1Dict["weightname"][0] +  "))+1.6)/3.2"  
+                string_input_var =  "((atan(log10("+proc1Dict["weightname"][0]+"/SUMBKGWEIGHT)))+1.571)/3.15"  
                 temp_string_input_var = "("
                 count_bkg = 0
                 #thisCfg.mvaCfg["inputvar"] = thisCfg.mvaCfg["otherinputvars"] + inputVar + proc1Dict["weightname"]
@@ -128,16 +128,16 @@ def defineNewCfgs(box, locks):
             #    continue
 
             if box.cfg.mvaCfg["oneVSall"] :
-                temp_string_input_var += proc2Dict["weightname"][0] + "+"
-                count_bkg += 1
                 if not (box.cfg.procCfg[proc2Name]["signal"]==-3 or box.cfg.procCfg[proc2Name]["signal"] == -5) :
+                    temp_string_input_var += proc2Dict["weightname"][0] + "+"
+                    count_bkg += 1
                     thisCfg.procCfg[proc2Name]["signal"] = 0
 
             else :
                 if not ( box.cfg.procCfg[proc2Name]["signal"]==-3 or box.cfg.procCfg[proc2Name]["signal"] == -5 or box.entries[proc2Name] < box.cfg.mvaCfg["minmcevents"] ) :          # the "second one" is the bkg, we will cut in order to keep 50% of the "first one" 
                     thisCfg = copy.deepcopy(box.cfg)
                     thisCfg.mvaCfg["name"] = proc1Name + "_vs_" + proc2Name
-                    thisCfg.mvaCfg["inputvar"] =  [ "((atan(" + proc2Dict["weightname"][0] + "-" + proc1Dict["weightname"][0] + "))+1.6)/3.2" ] # Proc2 is "background" and signal is assumed to be on the right...
+                    thisCfg.mvaCfg["inputvar"] =  [ "((atan(log10(" + proc1Dict["weightname"][0] + "/" + proc2Dict["weightname"][0] + ")))+1.571)/3.15" ] # Proc2 is "background" and signal is assumed to be on the right...
                     #thisCfg.mvaCfg["inputvar"] =  [ "((atan(" + proc1Dict["weightname"][0] + "/" + proc2Dict["weightname"][0] + "))+1.6)/3.2" ]    
                     #thisCfg.mvaCfg["inputvar"] = thisCfg.mvaCfg["otherinputvars"] + inputVar + proc1Dict["weightname"]
                     thisCfg.mvaCfg["splitname"] = thisCfg.mvaCfg["name"]
@@ -151,8 +151,8 @@ def defineNewCfgs(box, locks):
                     configs.append(thisCfg)
         if box.cfg.mvaCfg["oneVSall"] :
             temp_string_input_var = temp_string_input_var[:-1]
-            temp_string_input_var += ')/%s'%count_bkg
-            thisCfg.mvaCfg["inputvar"] = [string_input_var.replace("MEANBKGWEIGHT", temp_string_input_var)]
+            temp_string_input_var += ')'
+            thisCfg.mvaCfg["inputvar"] = [string_input_var.replace("SUMBKGWEIGHT", temp_string_input_var)]
             configs.append(thisCfg)
 
     for config in configs:
@@ -194,7 +194,8 @@ def analyseResults(box, locks):
                 break
     
     elif box.cfg.mvaCfg["analysisChoiceMode"] ==  "DiscriBased":
-        succeededMVA.sort(reverse = True, key = lambda mva: mva.result[0]/mva.result[1])
+        #succeededMVA.sort(reverse = True, key = lambda mva: mva.result[0]/mva.result[1])
+        succeededMVA.sort(reverse = True, key = lambda mva: mva.Gini)
         for mva in succeededMVA :
             if checkPurityImprovement(mva, box, locks) :
                 box.goodMVA = mva # Keep track of the MVA chosen to define the new sig- and bkg-like subsets. This must be specified before building a daughter box

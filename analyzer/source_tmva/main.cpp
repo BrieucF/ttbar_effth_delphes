@@ -30,7 +30,7 @@ int main(int argc, char **argv){
   if( contains(myConfig->GetWriteOptions(), "ROC") )
     myAna->DoROC();
 
-  if( myConfig->GetSplitMode() == "SoverB" || myConfig->GetSplitMode() == "SoverSqrtB" || myConfig->GetSplitMode() == "SoverSqrtSB" )
+  if( myConfig->GetSplitMode() == "SoverB" || myConfig->GetSplitMode() == "SoverSqrtB" || myConfig->GetSplitMode() == "SoverSqrtSB" || myConfig->GetSplitMode() == "Gini" )
     myAna->WPFromFigureOfMerit();
   else if( myConfig->GetSplitMode() == "fixedSigEff" )  
     myAna->BkgEffWPPrecise();

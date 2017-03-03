@@ -3,6 +3,7 @@
 import os, sys
 import pickle, pprint
 import TMVAReplayer
+import gc
 
 import yaml
 
@@ -30,3 +31,6 @@ with open(args.config) as f:
             datasets = configuration["datasets"][datasets_key]
             mvaReader = TMVAReplayer.TMVAReplayer(configuration, root, {datasets_key : datasets})
             mvaReader.run()
+            del mvaReader
+            del datasets
+            gc.collect()

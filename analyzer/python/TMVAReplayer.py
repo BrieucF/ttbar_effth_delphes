@@ -1,5 +1,6 @@
 import array, os, sys
 import ROOT
+import gc
 
 ROOT.TH1.AddDirectory = False
 def ensure_dir(f):
@@ -128,7 +129,7 @@ class TMVAReplayer:
 
     def createMVAs(self, node, parentNode = None):
         if not node.isEnd:
-            print("Creating MVA reader for node '%s'" % node.name)
+            #print("Creating MVA reader for node '%s'" % node.name)
             mvaNode = TMVAReplayer.MVANodeData(node.name, node.goodMVA)
             self.linkInputVariables(node.goodMVA, mvaNode)
             mvaNode.book()
@@ -331,6 +332,8 @@ class TMVAReplayer:
         self.summaryHist.Write()
         f.Close()
         self.chain.Reset()
+        ROOT.gROOT.Reset()
+        gc.collect()
 
 
     @staticmethod

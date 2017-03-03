@@ -58,7 +58,7 @@ class PAnalysis{
   //double sRootB, sRootSB, sB;
   bool myEvalOnTrained;
   bool myDiscriminantIsDef;
-  double myCut, myBkgEff, mySigEff;
+  double myCut, myBkgEff, mySigEff, myGini;
   std::vector<float> myInputVars;
 
   TMVA::Factory* myFactory;

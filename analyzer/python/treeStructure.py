@@ -31,6 +31,7 @@ class MISAnalysis:
         self.effEntries = {} # Holds the effective number of entries (sum of weights) for sig and bkg-like subsets
         self.yields = {} # Holds the yields for sig and bkg-like subsets
         self.yieldsErrors = {} # Holds the yields errors for sig and bkg-like subsets
+        self.Gini = 0. # Holds the best figure of merit
         self.sigLike = None # MISBox object
         self.bkgLike = None # MISBox object
         self._log = ""
@@ -45,6 +46,7 @@ class MISAnalysis:
             sigEff = float(logResults[0])
             bkgEff = float(logResults[1])
             cut = float(logResults[2])
+            gini = float(logResults[3])
             
             self.log("Analysis result: " + str(sigEff) + " sig. efficiency vs. " + str(bkgEff) + " bkg. efficiency at MVA cut value = " + str(cut) + ".")
             
@@ -53,6 +55,7 @@ class MISAnalysis:
 
             self.result = (sigEff, bkgEff)
             self.cutValue = cut
+            self.Gini = gini
 
             for split in ["Sig", "Bkg"]:
                 self.log("Results for " + split + "-Like part.")

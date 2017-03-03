@@ -33,6 +33,7 @@ PAnalysis::PAnalysis(PConfig *config){
   myDiscriminantIsDef = false;
   myBkgEff = 0;
   mySigEff = 0;
+  myGini = 0.;
   
   myConfig = config;
   myName = myConfig->GetAnaName();
@@ -578,8 +579,9 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
     cerr << "Cannot compute figures of merit without proc histograms!\n";
     exit(1);
   }
+  double yieldErrorCriteria = 0.5;
   double sB = 0, SRootB = 0, SRootSB = 0;
-  double sB_down = 0, SRootB_down = 0, SRootSB_down = 0;
+  double sB_down = 0, SRootB_down = 0, SRootSB_down = 0, Gini_father = 0, Gini_sigBox = 0, Gini_bkgBox = 0, Gini_tot = 0;
 
   double totExpBkg = 0, totExpSig = (double) myProc.at(mySig)->GetHist()->Integral(0, myConfig->GetHistBins()+1);
   TH1D* bkg_th1 = new TH1D("Bkgth1", "Bkgth1", myConfig->GetHistBins(), myConfig->GetHistLoX(), myConfig->GetHistHiX()); 
@@ -588,26 +590,67 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
     bkg_th1->Add(myProc.at(myBkgs.at(j))->GetHist());
   }  
   totExpBkg = bkg_th1->Integral(0, myConfig->GetHistBins()+1);
+  
+  double purity_father = totExpSig / (totExpSig + totExpBkg); 
+  Gini_father = (totExpSig + totExpBkg) * purity_father * (1 - purity_father);
+
+  double purity_sigBox = 0, purity_bkgBox = 0;
   double expBkg, expBkg_err, expSig, expSig_err;
-  double tempSB_down, tempSRootB_down, tempSRootSB_down;
-  double bestCutSB = std::numeric_limits<double>::lowest(), bestCutSRootB = std::numeric_limits<double>::lowest(), bestCutSRootSB = std::numeric_limits<double>::lowest();
-  double bestSBsig = 0, bestSBbkg = 0;
-  double sigEff_SB = 0, bkgEff_SB = 0, sigEff_SRootB = 0, bkgEff_SRootB = 0, sigEff_SRootSB = 0, bkgEff_SRootSB = 0;
+  double expBkg_leftSide, expBkg_err_leftSide, expSig_leftSide, expSig_err_leftSide;
+  double tempSB_down, tempSRootB_down, tempSRootSB_down, tempGini_tot;
+  double bestCutSB = std::numeric_limits<double>::lowest(), bestCutSRootB = std::numeric_limits<double>::lowest(), bestCutSRootSB = std::numeric_limits<double>::lowest(), bestCutGini = std::numeric_limits<double>::lowest();
+  double bestSBsig = 0, bestSBbkg = 0, bestGinisig = 0, bestGinibkg = 0;
+  double sigEff_SB = 0, bkgEff_SB = 0, sigEff_SRootB = 0, bkgEff_SRootB = 0, sigEff_SRootSB = 0, bkgEff_SRootSB = 0, sigEff_Gini = 0, bkgEff_Gini = 0;
 
   double max_efficiency = 0.99999;
 
-  for(int i=0; i<=myConfig->GetHistBins()+1; i++){
+  double relYieldErr, relYieldErr_leftSide;
+  for(int i=1; i<=myConfig->GetHistBins()+1; i++){
+    // Signal daughter Box
     expSig = (double) myProc.at(mySig)->GetHist()->IntegralAndError(i, myConfig->GetHistBins()+1, expSig_err);
     expSig_err = expSig_err;
     expBkg = bkg_th1->IntegralAndError(i, myConfig->GetHistBins()+1, expBkg_err);
     expBkg_err = expBkg_err;
     if (expBkg <= 0 || expSig <= 0)
       continue;
+    relYieldErr = sqrt(expBkg_err*expBkg_err + expSig_err*expSig_err) / (expSig + expBkg); 
+    if (relYieldErr > yieldErrorCriteria)
+        continue;
+
+    // Baackground daughter Box
+    expSig_leftSide = (double) myProc.at(mySig)->GetHist()->IntegralAndError(0, i-1, expSig_err_leftSide);
+    expSig_err_leftSide = expSig_err_leftSide;
+    expBkg_leftSide = bkg_th1->IntegralAndError(0, i-1, expBkg_err_leftSide);
+    expBkg_err_leftSide = expBkg_err_leftSide;
+    if (expBkg_leftSide <= 0 || expSig_leftSide <= 0)
+        continue;
+    relYieldErr_leftSide = sqrt(expBkg_err_leftSide*expBkg_err_leftSide + expSig_err_leftSide*expSig_err_leftSide) / (expSig_leftSide + expBkg_leftSide); 
+    if (relYieldErr_leftSide > yieldErrorCriteria)
+        continue;
+    
 
     tempSB_down = expSig/expBkg - std::abs(expSig/expBkg)*sqrt(pow(expSig_err/expSig, 2) + pow(expBkg_err/expBkg, 2));
     tempSRootB_down = expSig/sqrt(expBkg) - sqrt( pow(expSig_err, 2)/expBkg + pow(expSig*expBkg_err, 2)/(4*pow(expBkg, 3)) );
     tempSRootSB_down = expSig/sqrt(expBkg+expSig) - sqrt(pow(((sqrt(expSig+expBkg) - expSig/(2*sqrt(expBkg+expSig)))*expSig_err)/(expBkg+expSig), 2) + pow(expSig*expBkg_err/2, 2)*pow(expBkg+expSig,-3));
-    if(i > 1){
+    
+    purity_sigBox = expSig / (expBkg + expSig);
+    Gini_sigBox = (expBkg + expSig) * purity_sigBox * (1 - purity_sigBox);
+    purity_bkgBox = expSig_leftSide / (expBkg_leftSide + expSig_leftSide);
+    Gini_bkgBox = (expBkg_leftSide + expSig_leftSide) * purity_bkgBox * (1 - purity_bkgBox);
+
+    tempGini_tot = Gini_father - Gini_sigBox - Gini_bkgBox;
+
+    if (tempGini_tot > Gini_tot){
+        Gini_tot = tempGini_tot;
+        bestGinisig = expSig;
+        bestGinibkg = expBkg;
+        sigEff_Gini = std::min(expSig/totExpSig, max_efficiency);
+        bkgEff_Gini = std::min(expBkg/totExpBkg, max_efficiency);
+        bestCutGini = myProc.at(mySig)->GetHist()->GetBinLowEdge(i);
+    }
+
+
+    //if(i > 1){
       if(tempSB_down > sB_down){
         bestSBsig = expSig;
         bestSBbkg = expBkg;
@@ -631,7 +674,7 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
         bkgEff_SRootSB = std::min(expBkg/totExpBkg, max_efficiency);
         bestCutSRootSB = myProc.at(mySig)->GetHist()->GetBinLowEdge(i);
       }
-    }
+    //}
   }
   delete bkg_th1;
   #ifdef P_LOG
@@ -639,12 +682,14 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
     cout << "  S/B = " << sB << " if we cut at " << bestCutSB << ". We have then " << bestSBsig << " signal events and " << bestSBbkg << " background events." << endl;
     cout << "  S/sqrt(B) = " << SRootB << " if we cut at " << bestCutSRootB << endl;
     cout << "  S/sqrt(S+B) = " << SRootSB << " if we cut at " << bestCutSRootSB << endl;
+    cout << "  Gini = " << Gini_tot << " if we cut at " << bestCutGini << ". We have then " << bestGinisig << " signal events and " << bestGinibkg << " background events." << endl;
   #endif
 
-  std::vector<double> bestCutSB_sigEff_bkgEff = {bestCutSB, sigEff_SB, bkgEff_SB};
-  std::vector<double> bestCutSRootB_sigEff_bkgEff = {bestCutSRootB, sigEff_SRootB, bkgEff_SRootB};
-  std::vector<double> bestCutSRootSB_sigEff_bkgEff = {bestCutSRootSB, sigEff_SRootSB, bkgEff_SRootSB};
-  return std::map<std::string, std::vector<double>> {{"SoverB", bestCutSB_sigEff_bkgEff}, {"SoverSqrtB", bestCutSRootB_sigEff_bkgEff}, {"SoverSqrtSB", bestCutSRootSB_sigEff_bkgEff}};
+  std::vector<double> bestCutSB_sigEff_bkgEff = {bestCutSB, sigEff_SB, bkgEff_SB, sB};
+  std::vector<double> bestCutSRootB_sigEff_bkgEff = {bestCutSRootB, sigEff_SRootB, bkgEff_SRootB, SRootB};
+  std::vector<double> bestCutSRootSB_sigEff_bkgEff = {bestCutSRootSB, sigEff_SRootSB, bkgEff_SRootSB, SRootSB};
+  std::vector<double> bestCutGini_sigEff_bkgEff = {bestCutGini, sigEff_Gini, bkgEff_Gini, Gini_tot};
+  return std::map<std::string, std::vector<double>> {{"SoverB", bestCutSB_sigEff_bkgEff}, {"SoverSqrtB", bestCutSRootB_sigEff_bkgEff}, {"SoverSqrtSB", bestCutSRootSB_sigEff_bkgEff}, {"Gini", bestCutGini_sigEff_bkgEff}};
 }
 
 void PAnalysis::WPFromFigureOfMerit(void){
@@ -652,9 +697,11 @@ void PAnalysis::WPFromFigureOfMerit(void){
   myCut = figuresOfMerit.at(myConfig->GetSplitMode())[0];
   mySigEff = figuresOfMerit.at(myConfig->GetSplitMode())[1];
   myBkgEff = figuresOfMerit.at(myConfig->GetSplitMode())[2];
+  myGini = figuresOfMerit.at(myConfig->GetSplitMode())[3];
   if (myCut == std::numeric_limits<double>::lowest()){
+      myGini = 0.;
     #ifdef P_LOG
-      cout << "No down fluctuated figure of merit is bigger than 0 " << endl; //, switching to fixed efficiency mode." << endl;
+      cout << "No figure of merit could be defined (too big stat error or no down fluctuation bigger than 0) " << endl; //, switching to fixed efficiency mode." << endl;
     #endif
     exit(1);
     //BkgEffWPPrecise();
@@ -772,7 +819,7 @@ void PAnalysis::WriteResult(void){
   
   ofstream logFile;
   logFile.open(output);
-  logFile << mySigEff << endl << myBkgEff << endl << myCut;
+  logFile << mySigEff << endl << myBkgEff << endl << myCut << endl << myGini;
   logFile.close();
 }  
 
