@@ -579,7 +579,7 @@ std::map<std::string, std::vector<double>> PAnalysis::FiguresOfMerit(void){
     cerr << "Cannot compute figures of merit without proc histograms!\n";
     exit(1);
   }
-  double yieldErrorCriteria = 0.5;
+  double yieldErrorCriteria = 0.1;
   double sB = 0, SRootB = 0, SRootSB = 0;
   double sB_down = 0, SRootB_down = 0, SRootSB_down = 0, Gini_father = 0, Gini_sigBox = 0, Gini_bkgBox = 0, Gini_tot = 0;
 

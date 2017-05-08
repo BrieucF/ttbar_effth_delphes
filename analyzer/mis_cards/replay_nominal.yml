@@ -1,0 +1,285 @@
+# List of input datasets
+datasets:
+        TTTo2L2Nu_13TeV-powheg_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTTo2L2Nu_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            color: 5009
+            signal: -1
+            xsection: 87.31 # in pb
+            genevents: 4995600
+            treename: t
+            # Formula used to get the event weights from branches in the TTree (ex: GenWeight*BTagScale)
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso*( 0.89008*isElEl + 0.97815*isMuMu + 0.95010*(isElMu+isMuEl) )
+        DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -2 # if you use the splitted rootfile to make the total yield order, you should not put this one to -1
+            color: 5014
+            xsection: 6025.2
+            genevents: 4923952988160
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso*( 0.73009*isElEl + 0.78511*isMuMu + 1.0*(isElMu+isMuEl))
+        DYxxToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/DYxxToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5014
+            xsection: 6025.2
+            genevents: 4923952988160
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso*( 0.73009*isElEl + 0.78511*isMuMu + 1.0*(isElMu+isMuEl))
+        DYbxToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/DYbxToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5014
+            xsection: 6025.2
+            genevents: 4923952988160
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso*( 0.73009*isElEl + 0.78511*isMuMu + 1.0*(isElMu+isMuEl))
+        DYbbToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/DYbbToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext4_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5014
+            xsection: 6025.2
+            genevents: 4923952988160
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso*( 0.73009*isElEl + 0.78511*isMuMu + 1.0*(isElMu+isMuEl))
+        ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5012
+            xsection: 35.6
+            genevents: 999400
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        ST_tW_top_5f_inclusiveDecays_13TeV-powheg_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/ST_tW_top_5f_inclusiveDecays_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5008
+            xsection: 35.6
+            genevents: 1000000
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5011
+            xsection: 3.22
+            genevents: 77479632
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5010
+            xsection: 0.172948      
+            genevents: 147445
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5010
+            xsection: 0.2529
+            genevents: 99238.25
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTZToQQ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTZToQQ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5010
+            xsection: 0.5297
+            genevents: 394700.5625
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5010
+            xsection: 0.2043
+            genevents: 84828.4453125
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTWJetsToQQ_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTWJetsToQQ_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5010
+            xsection: 0.4062
+            genevents: 568227.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        ttHTobb_M125_13TeV_powheg_pythia8:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/ttHTobb_M125_13TeV_powheg_pythia8_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5010
+            xsection: 0.2934
+            genevents: 3772012.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        WWTo2L2Nu_13TeV-powheg_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/WWTo2L2Nu_13TeV-powheg_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5010
+            xsection: 12.178
+            genevents: 1979988.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        ST_t-channel_4f_leptonDecays_13TeV-amcatnlo_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/ST_t-channel_4f_leptonDecays_13TeV-amcatnlo_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5010
+            xsection: 70.69
+            genevents: 1342950784.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext3:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_extended_ext0_plus_ext1_plus_ext3_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -1
+            color: 5010
+            xsection: 18610.0
+            genevents: 5117338189824.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+    
+        Data_Run2015D-16Dec2015-v2_2016-03-03:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/Data_Run2015D-16Dec2015-v2_2016-03-03_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"] #"/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/DoubleEG_Run2015D-16Dec2015-v2_2016-03-03_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"] #, "/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/DoubleMuon_Run2015D-16Dec2015-v1_2016-03-03_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root", "/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/MuonEG_Run2015D-16Dec2015-v1_2016-03-03_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -5
+            color: kBlack
+            xsection: 1 # 0.000434783  1/lumi because the replay multiply by lumi..    
+            genevents: 1
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+    # Signals :
+        GluGluToHHTo2B2VTo2L2Nu_node_SM_13TeV-madgraph:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/GluGluToHHTo2B2VTo2L2Nu_node_SM_13TeV-madgraph_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001 # in pb
+            genevents: 290400.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTbarDMJets_pseudoscalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 50318.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTbarDMJets_scalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTbarDMJets_scalar_Mchi-1_Mphi-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 49307.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTbarDMJets_pseudoscalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTbarDMJets_pseudoscalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 49342.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTbarDMJets_scalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTbarDMJets_scalar_Mchi-1_Mphi-500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 49962.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTbarDMJets_pseudoscalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 50564.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        TTbarDMJets_scalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/TTbarDMJets_scalar_Mchi-1_Mphi-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 48483.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        HToZATo2L2B_MH-200_MA-50_13TeV-madgraph_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/HToZATo2L2B_MH-200_MA-50_13TeV-madgraph_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 100000.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        HToZATo2L2B_MH-3000_MA-2000_13TeV-madgraph_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/HToZATo2L2B_MH-3000_MA-2000_13TeV-madgraph_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 96400.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        HToZATo2L2B_MH-500_MA-300_13TeV-madgraph_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/HToZATo2L2B_MH-500_MA-300_13TeV-madgraph_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 96800.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        HToZATo2L2B_MH-800_MA-700_13TeV-madgraph_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/HToZATo2L2B_MH-800_MA-700_13TeV-madgraph_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 100000.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        SMS-T2tt_mStop-500_mLSP-325_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/SMS-T2tt_mStop-500_mLSP-325_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 397678.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        SMS-T2tt_mStop-850_mLSP-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/SMS-T2tt_mStop-850_mLSP-100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 229937.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        GluGluToRadionToHHTo2B2VTo2L2Nu_M-900_narrow_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/GluGluToRadionToHHTo2B2VTo2L2Nu_M-900_narrow_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 294800.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        GluGluToRadionToHHTo2B2VTo2L2Nu_M-400_narrow_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/GluGluToRadionToHHTo2B2VTo2L2Nu_M-400_narrow_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 294800.0
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+        GluGluToRadionToHHTo2B2VTo2L2Nu_M-650_narrow_Fall15MiniAODv2:
+            path: ["/home/fynu/bfrancois/scratch/framework/MIS_prod_data/CMSSW_7_6_5/src/cp3_llbb/HHTools/treeFactory_hh/flatTrees_with_weight_v2_nonInfPunderatedWeight/slurm/output/GluGluToRadionToHHTo2B2VTo2L2Nu_M-650_narrow_Fall15MiniAODv2_v0.1.5+76X_HHAnalysis_v1.0+765_MISearch_2016-08-10.v3_skim_addWeight_v2_histos.root"]
+            signal: -3
+            color: 5010
+            xsection: 0.001
+            genevents: 294800
+            treename: t
+            evtweight: jjbtag*pu*event_weight*trigeff*llidiso
+
+# Analysis: define options relative to the tree building (used by driver.py) and the MVA training (used by tmva)
+analysis:
+    trained_tree: 'results/one_vs_all_puregini_10pc_effratio_2_nonInfPunderatedWeight_DYdfWeight/one_vs_all_puregini_10pc_effratio_2_nonInfPunderatedWeight_DYdfWeight_tree.p'
+    name: replay_nominal
+    outputdir: results/one_vs_all_puregini_10pc_effratio_2_nonInfPunderatedWeight_DYdfWeight/replay_nominal/
+    # pb-1
+    lumi: 1
